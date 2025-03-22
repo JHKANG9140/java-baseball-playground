@@ -1,26 +1,16 @@
 package study;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Calculator {
 
     int StringCalculator(String expression) {
         String[] split = expression.split(" ");
-        List<Integer> nums = new ArrayList<>();
-        List<String> operator = new ArrayList<>();
-        for (String s : split) {
-            if (intCheck(s)) nums.add(Integer.parseInt(s));
-            else operator.add(s);
+        int result = Integer.parseInt(split[0]);
+
+        for (int i = 1; i < split.length; i += 2) {
+            result = intermediateResults(result, split[i], Integer.parseInt(split[i + 1]));
         }
-        int result = 0;
-        for (int i = 0; i < operator.size(); i++) {
-            if (result == 0) {
-                result = intermediateResults(nums.get(i), operator.get(i), nums.get(i + 1));
-            } else {
-                result = intermediateResults(result, operator.get(i), nums.get(i + 1));
-            }
-        }
+
         return result;
     }
 
@@ -34,15 +24,6 @@ public class Calculator {
                 return multiply(a, b);
             default:
                 return divide(a, b);
-        }
-    }
-
-    private boolean intCheck(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
