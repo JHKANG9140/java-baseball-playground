@@ -1,5 +1,7 @@
 package study.baseball;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class NumberBaseball {
@@ -32,35 +34,105 @@ public class NumberBaseball {
      */
 
     public static void main(String[] args) {
-//        String comNum = String.valueOf((int)(Math.random() * 900) + 100);
-        String comNum = "713";
-        System.out.println("computer number: " + comNum);
-        String[] comArr = comNum.split("");
+        Scanner in = new Scanner(System.in);
+        boolean playAgain = true;
+        while (playAgain) {
+            playGame(in);
+            playAgain = checkPlayAgain(in);
+        }
+        System.out.println("게임을 종료합니다.");
+        in.close();
 
-        while (true) {
-            Scanner in = new Scanner(System.in);
+    }
+
+    private static void playGame(Scanner in) {
+        String[] comArr = generateRandomNumber();
+        String[] userArr = {"","",""};
+
+        while (!checkSame(userArr, comArr)) {
             System.out.printf("숫자를 입력해 주세요: ");
             String userNum = in.nextLine();
-            if (userNum.equals(comNum)) break;
 
-            int strike = 0;
-            int ball = 0;
+            userArr = userNum.split("");
 
-            String[] userArr = userNum.split("");
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (userArr[i].equals(comArr[j])) {
-                        if (i == j) strike++;
-                        else ball++;
-                    }
-                }
-            }
-
-            if (strike == 0 && ball == 0) System.out.println("Nothing");
-            if (strike == 0 && ball != 0) System.out.println(ball + "ball");
-            if (strike != 0 && ball == 0) System.out.println(strike + "strike");
-            if (strike != 0 && ball != 0) System.out.println(ball + "ball " + strike + "strike");
+            System.out.println(getBallAndStrike(userArr, comArr));
 
         }
+        System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
+        System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+    }
+
+    private static boolean checkSame(String[] userArr, String[] comArr) {
+        if (userArr[0].equals(comArr[0]) && userArr[1].equals(comArr[1]) && userArr[2].equals(comArr[2])) return true;
+        return false;
+    }
+
+    private static String[] generateRandomNumber() {
+        ArrayList<Integer> numbers = new ArrayList<>();
+        for (int i = 1; i <= 9; i++) {
+            numbers.add(i);
+        }
+        Collections.shuffle(numbers);
+
+        String[] result = new String[3];
+        result[0] = String.valueOf(numbers.get(0));
+        result[1] = String.valueOf(numbers.get(1));
+        result[2] = String.valueOf(numbers.get(2));
+        return result;
+    }
+
+    private static String getBallAndStrike(String[] userArr, String[] comArr) {
+        int strike = countStrike(userArr, comArr);
+        int ball = countBall(userArr, comArr);
+
+        if (strike == 0 && ball != 0) return ball + "ball";
+        if (strike != 0 && ball == 0) return strike + "strike";
+        if (strike != 0 && ball != 0) return ball + "ball " + strike + "strike";
+        return "Nothing";
+    }
+
+    private static int countStrike(String[] userArr, String[] comArr) {
+        int strike = 0;
+        strike += checkStrikeAt(userArr[0], comArr[0]);
+        strike += checkStrikeAt(userArr[1], comArr[1]);
+        strike += checkStrikeAt(userArr[2], comArr[2]);
+        return strike;
+    }
+
+    private static int checkStrikeAt(String a, String b) {
+        if (a.equals(b)) return 1;
+        return 0;
+    }
+
+    private static int countBall(String[] userArr, String[] comArr) {
+        int balls = 0;
+        balls += countBallForPosition(userArr, comArr, 0);
+        balls += countBallForPosition(userArr, comArr, 1);
+        balls += countBallForPosition(userArr, comArr, 2);
+        return balls;
+    }
+
+    private static int countBallForPosition(String[] userArr, String[] comArr, int i) {
+        int ball = 0;
+        ball += countBallAt(userArr, comArr, i, 0);
+        ball += countBallAt(userArr, comArr, i, 1);
+        ball += countBallAt(userArr, comArr, i, 2);
+        return ball;
+    }
+
+    private static int countBallAt(String[] userArr, String[] comArr, int i, int j) {
+        if (userArr[i].equals(comArr[j]) && i != j) return 1;
+        return 0;
+    }
+
+    private static boolean checkPlayAgain(Scanner in) {
+        //하나의 scanner로 nextInt, nextLine 을 동시에 쓸수 없는듯
+        String choice = in.nextLine();
+        while (!choice.equals("1") && !choice.equals("2")) {
+            System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+            choice = in.nextLine();
+        }
+        if (choice.equals("1")) return true;
+        return false;
     }
 }
