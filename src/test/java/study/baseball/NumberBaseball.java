@@ -33,7 +33,7 @@ public class NumberBaseball {
     함수(또는 메소드)가 한 가지 일만 하도록 최대한 작게 만들어라.`
      */
 
-    public static void main(String[] args) {
+    public void main() {
         Scanner in = new Scanner(System.in);
         boolean playAgain = true;
         while (playAgain) {
@@ -45,7 +45,7 @@ public class NumberBaseball {
 
     }
 
-    private static void playGame(Scanner in) {
+    public void playGame(Scanner in) {
         String[] comArr = generateRandomNumber();
         String[] userArr = {"","",""};
 
@@ -62,12 +62,12 @@ public class NumberBaseball {
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
     }
 
-    private static boolean checkSame(String[] userArr, String[] comArr) {
+    public boolean checkSame(String[] userArr, String[] comArr) {
         if (userArr[0].equals(comArr[0]) && userArr[1].equals(comArr[1]) && userArr[2].equals(comArr[2])) return true;
         return false;
     }
 
-    private static String[] generateRandomNumber() {
+    public String[] generateRandomNumber() {
         ArrayList<Integer> numbers = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
             numbers.add(i);
@@ -81,7 +81,7 @@ public class NumberBaseball {
         return result;
     }
 
-    private static String getBallAndStrike(String[] userArr, String[] comArr) {
+    public String getBallAndStrike(String[] userArr, String[] comArr) {
         int strike = countStrike(userArr, comArr);
         int ball = countBall(userArr, comArr);
 
@@ -91,7 +91,7 @@ public class NumberBaseball {
         return "Nothing";
     }
 
-    private static int countStrike(String[] userArr, String[] comArr) {
+    public int countStrike(String[] userArr, String[] comArr) {
         int strike = 0;
         strike += checkStrikeAt(userArr[0], comArr[0]);
         strike += checkStrikeAt(userArr[1], comArr[1]);
@@ -99,12 +99,12 @@ public class NumberBaseball {
         return strike;
     }
 
-    private static int checkStrikeAt(String a, String b) {
+    public int checkStrikeAt(String a, String b) {
         if (a.equals(b)) return 1;
         return 0;
     }
 
-    private static int countBall(String[] userArr, String[] comArr) {
+    public int countBall(String[] userArr, String[] comArr) {
         int balls = 0;
         balls += countBallForPosition(userArr, comArr, 0);
         balls += countBallForPosition(userArr, comArr, 1);
@@ -112,7 +112,7 @@ public class NumberBaseball {
         return balls;
     }
 
-    private static int countBallForPosition(String[] userArr, String[] comArr, int i) {
+    public int countBallForPosition(String[] userArr, String[] comArr, int i) {
         int ball = 0;
         ball += countBallAt(userArr, comArr, i, 0);
         ball += countBallAt(userArr, comArr, i, 1);
@@ -120,12 +120,12 @@ public class NumberBaseball {
         return ball;
     }
 
-    private static int countBallAt(String[] userArr, String[] comArr, int i, int j) {
+    public int countBallAt(String[] userArr, String[] comArr, int i, int j) {
         if (userArr[i].equals(comArr[j]) && i != j) return 1;
         return 0;
     }
 
-    private static boolean checkPlayAgain(Scanner in) {
+    public boolean checkPlayAgain(Scanner in) {
         //하나의 scanner로 nextInt, nextLine 을 동시에 쓸수 없는듯
         String choice = in.nextLine();
         while (!choice.equals("1") && !choice.equals("2")) {
