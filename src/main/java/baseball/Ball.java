@@ -11,6 +11,11 @@ public class Ball {
         this.num = num;
     }
 
+    /**
+     * 공과 공의 strike, ball, nothing 판단
+     * @param ball
+     * @return
+     */
     public BallStatus check(Ball ball) {
         if (this.equals(ball)) {
             return BallStatus.STRIKE;
@@ -33,4 +38,11 @@ public class Ball {
         return Objects.hash(position, num);
     }
 
+    /**
+     * 랜덤 입력 번호 확인 목적
+     * @return
+     */
+    public int getNum() {
+        return num;
+    }
 }
